@@ -11,9 +11,10 @@ import {
   ParseFilePipe,
   MaxFileSizeValidator,
   FileTypeValidator,
+  UploadedFiles,
 } from '@nestjs/common';
 import { FilesService } from './files.service';
-import { FileInterceptor } from '@nestjs/platform-express';
+import { FileInterceptor, FilesInterceptor } from '@nestjs/platform-express';
 
 @Controller('files')
 export class FilesController {
@@ -35,6 +36,12 @@ export class FilesController {
     file: Express.Multer.File,
   ) {
     return file;
+  }
+
+  @Post('a-lot-of-files')
+  @UseInterceptors(FilesInterceptor('files'))
+  uploadFiles(@UploadedFiles() files: Array<Express.Multer.File>) {
+    return files;
   }
 
   @Get()
