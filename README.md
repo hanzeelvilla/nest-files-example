@@ -19,7 +19,9 @@ cd nest-files-example
 npm install
 ```
 
-3. Start the development server:
+3. Rename the `.env.example` file to `.env` and update the environment variables with your R2 credentials.
+
+4. Start the development server:
 
 ```bash
 npm run dev:start
