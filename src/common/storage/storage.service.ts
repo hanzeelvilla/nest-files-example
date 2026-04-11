@@ -1,13 +1,18 @@
 import { extname } from 'node:path';
 
 import { ConfigService } from '@nestjs/config';
-import { Injectable } from '@nestjs/common';
+import {
+  Injectable,
+  InternalServerErrorException,
+  Logger,
+} from '@nestjs/common';
 
 import { v4 as uuidv4 } from 'uuid';
 import { PutObjectCommand, S3Client } from '@aws-sdk/client-s3';
 
 @Injectable()
 export class StorageService {
+  private readonly logger = new Logger(StorageService.name);
   private s3Client: S3Client;
 
   constructor(private readonly configService: ConfigService) {
@@ -30,18 +35,23 @@ export class StorageService {
     const fileExtension = extname(file.originalname);
     const fileKey = `${uuidv4()}${fileExtension}`;
 
-    await this.s3Client.send(
-      new PutObjectCommand({
-        Bucket: bucketName,
-        Key: fileKey,
-        Body: file.buffer,
-        ContentType: file.mimetype,
-      }),
-    );
+    try {
+      await this.s3Client.send(
+        new PutObjectCommand({
+          Bucket: bucketName,
+          Key: fileKey,
+          Body: file.buffer,
+          ContentType: file.mimetype,
+        }),
+      );
 
-    return {
-      url: `${publicUrl}/${fileKey}`,
-      key: fileKey,
-    };
+      return {
+        url: `${publicUrl}/${fileKey}`,
+        key: fileKey,
+      };
+    } catch (error) {
+      this.logger.error('Error uploading file to R2', error);
+      throw new InternalServerErrorException('Failed to upload file');
+    }
   }
 }
