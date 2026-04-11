@@ -35,7 +35,7 @@ export class FilesController {
     )
     file: Express.Multer.File,
   ) {
-    return file;
+    return this.filesService.uploadFile(file);
   }
 
   @Post('a-lot-of-files')

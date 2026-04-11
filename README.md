@@ -26,3 +26,7 @@ npm install
 ```bash
 npm run dev:start
 ```
+
+## API Endpoints
+
+- `POST /api/files`: Upload a single file.

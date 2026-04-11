@@ -1,8 +1,11 @@
 import { Injectable } from '@nestjs/common';
+import { StorageService } from '../common/storage/storage.service';
 @Injectable()
 export class FilesService {
-  create() {
-    return 'This action adds a new file';
+  constructor(private readonly storageService: StorageService) {}
+
+  async uploadFile(file: Express.Multer.File) {
+    return await this.storageService.uploadFile(file);
   }
 
   findAll() {
