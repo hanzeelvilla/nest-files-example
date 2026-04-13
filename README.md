@@ -30,6 +30,7 @@ npm run dev:start
 ## API Endpoints
 
 - `POST /api/files`: Upload a single file.
+- `DELETE /api/files/:id`: Delete a file by its ID.
 
 ## Improvements
 
