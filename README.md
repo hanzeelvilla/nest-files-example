@@ -19,9 +19,14 @@ cd nest-files-example
 npm install
 ```
 
-3. Rename the `.env.example` file to `.env` and update the environment variables with your R2 credentials.
+3. Rename the `.env.example` file to `.env` and update the environment variables with your R2 credentials and database connection details.
+4. Run the container:
 
-4. Start the development server:
+```bash
+docker-compose up -d
+```
+
+5. Start the development server:
 
 ```bash
 npm run dev:start
