@@ -1,9 +1,6 @@
 import {
   Controller,
-  Get,
   Post,
-  Body,
-  Patch,
   Param,
   Delete,
   UseInterceptors,
@@ -12,6 +9,7 @@ import {
   MaxFileSizeValidator,
   FileTypeValidator,
   UploadedFiles,
+  HttpCode,
 } from '@nestjs/common';
 import { FilesService } from './files.service';
 import { FileInterceptor, FilesInterceptor } from '@nestjs/platform-express';
@@ -44,23 +42,9 @@ export class FilesController {
     return files;
   }
 
-  @Get()
-  findAll() {
-    return this.filesService.findAll();
-  }
-
-  @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.filesService.findOne(+id);
-  }
-
-  @Patch(':id')
-  update(@Param('id') id: string) {
-    return this.filesService.update(+id);
-  }
-
   @Delete(':id')
+  @HttpCode(204)
   remove(@Param('id') id: string) {
-    return this.filesService.remove(+id);
+    return this.filesService.remove(id);
   }
 }

@@ -8,19 +8,7 @@ export class FilesService {
     return await this.storageService.uploadFile(file);
   }
 
-  findAll() {
-    return `This action returns all files`;
-  }
-
-  findOne(id: number) {
-    return `This action returns a #${id} file`;
-  }
-
-  update(id: number) {
-    return `This action updates a #${id} file`;
-  }
-
-  remove(id: number) {
-    return `This action removes a #${id} file`;
+  async remove(id: string) {
+    return await this.storageService.deleteFile(id);
   }
 }

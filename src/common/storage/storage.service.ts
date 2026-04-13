@@ -8,7 +8,11 @@ import {
 } from '@nestjs/common';
 
 import { v4 as uuidv4 } from 'uuid';
-import { PutObjectCommand, S3Client } from '@aws-sdk/client-s3';
+import {
+  DeleteObjectCommand,
+  PutObjectCommand,
+  S3Client,
+} from '@aws-sdk/client-s3';
 
 @Injectable()
 export class StorageService {
@@ -52,6 +56,22 @@ export class StorageService {
     } catch (error) {
       this.logger.error('Error uploading file to R2', error);
       throw new InternalServerErrorException('Failed to upload file');
+    }
+  }
+
+  async deleteFile(fileKey: string) {
+    const bucketName = this.configService.getOrThrow<string>('R2_BUCKET_NAME');
+
+    try {
+      await this.s3Client.send(
+        new DeleteObjectCommand({
+          Bucket: bucketName,
+          Key: fileKey,
+        }),
+      );
+    } catch (error) {
+      this.logger.error('Error deleting file from R2', error);
+      throw new InternalServerErrorException('Failed to delete file');
     }
   }
 }
