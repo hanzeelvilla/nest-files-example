@@ -30,3 +30,10 @@ npm run dev:start
 ## API Endpoints
 
 - `POST /api/files`: Upload a single file.
+
+## Improvements
+
+- [ ] Save the key of the uploaded file in the database for future reference.
+- [ ] Authenticate users and associate uploaded files with their accounts.
+- [ ] Resize images before uploading to R2 to save storage space and bandwidth.
+- [ ] Multiple file upload support.
