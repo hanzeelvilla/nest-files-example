@@ -42,6 +42,7 @@ npm run dev:start
 ### User authentication endpoints
 
 - `POST /api/auth/register`: Register a new user.
+- `POST /api/auth/login`: Log in an existing user.
 
 ## Improvements
 
