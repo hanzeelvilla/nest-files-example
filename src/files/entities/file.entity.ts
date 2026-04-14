@@ -9,25 +9,25 @@ import {
 @Entity('files')
 export class File {
   @PrimaryGeneratedColumn('uuid')
-  id?: string;
+  id!: string;
 
   @Column('text', {
     unique: true,
   })
-  key?: string;
+  key!: string;
 
   @Column('text', {
     unique: true,
   })
-  url?: string;
+  url!: string;
 
   @CreateDateColumn({
     name: 'created_at',
   })
-  createdAt?: Date;
+  createdAt!: Date;
 
   @UpdateDateColumn({
     name: 'updated_at',
   })
-  updatedAt?: Date;
+  updatedAt!: Date;
 }

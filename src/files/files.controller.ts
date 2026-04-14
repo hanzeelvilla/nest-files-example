@@ -10,6 +10,7 @@ import {
   FileTypeValidator,
   UploadedFiles,
   HttpCode,
+  ParseUUIDPipe,
 } from '@nestjs/common';
 import { FilesService } from './files.service';
 import { FileInterceptor, FilesInterceptor } from '@nestjs/platform-express';
@@ -44,7 +45,7 @@ export class FilesController {
 
   @Delete(':id')
   @HttpCode(204)
-  remove(@Param('id') id: string) {
+  remove(@Param('id', ParseUUIDPipe) id: string) {
     return this.filesService.remove(id);
   }
 }

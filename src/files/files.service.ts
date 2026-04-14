@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable } from '@nestjs/common';
 import { StorageService } from '../common/storage/storage.service';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
@@ -25,6 +25,11 @@ export class FilesService {
   }
 
   async remove(id: string) {
-    return await this.storageService.deleteFile(id);
+    const file = await this.fileRepository.findOneBy({ id });
+
+    if (!file) throw new BadRequestException(`File with id ${id} not found`);
+
+    await this.storageService.deleteFile(file.key);
+    await this.fileRepository.delete(id);
   }
 }
