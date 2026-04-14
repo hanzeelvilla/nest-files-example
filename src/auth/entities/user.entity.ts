@@ -7,9 +7,10 @@ import {
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
+import { ValidRoles } from '../interfaces/valid-roles.enum';
 
 @Entity('users')
-export class Auth {
+export class User {
   @PrimaryGeneratedColumn('uuid')
   id!: string;
 
@@ -29,16 +30,16 @@ export class Auth {
   @Column('text')
   lastname!: string;
 
-  @Column('boolean', {
-    default: false,
-  })
-  isActive?: boolean;
-
   @Column('text', {
     array: true,
-    default: ['user'],
+    default: [ValidRoles.user],
   })
-  roles!: string[];
+  roles!: ValidRoles[];
+
+  @Column('boolean', {
+    default: true,
+  })
+  is_active!: boolean;
 
   @CreateDateColumn({
     name: 'created_at',
