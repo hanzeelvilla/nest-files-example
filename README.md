@@ -34,8 +34,14 @@ npm run dev:start
 
 ## API Endpoints
 
+### File management endpoints
+
 - `POST /api/files`: Upload a single file.
 - `DELETE /api/files/:id`: Delete a file by its ID.
+
+### User authentication endpoints
+
+- `POST /api/auth/register`: Register a new user.
 
 ## Improvements
 
