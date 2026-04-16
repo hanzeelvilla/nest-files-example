@@ -4,11 +4,13 @@ import {
   InternalServerErrorException,
   UnauthorizedException,
 } from '@nestjs/common';
+import { JwtService } from '@nestjs/jwt';
 import { InjectRepository } from '@nestjs/typeorm';
 import { QueryFailedError, Repository } from 'typeorm';
 import * as bcrypt from 'bcrypt';
 
 import { User } from './entities/user.entity';
+import { JwtPayload } from './interfaces/jwt-payload.interface';
 import { CreateUserDto, LoginUserDto } from './dto';
 
 type PostgresError = {
@@ -20,6 +22,7 @@ export class AuthService {
   constructor(
     @InjectRepository(User)
     private readonly userRepository: Repository<User>,
+    private readonly jwtService: JwtService,
   ) {}
 
   async create(createUserDto: CreateUserDto) {
@@ -44,17 +47,29 @@ export class AuthService {
 
   async login(loginUserDto: LoginUserDto) {
     const { email, password } = loginUserDto;
-    const user = await this.userRepository.findOne({
-      where: { email },
-      select: { email: true, password: true },
-    });
+    const user = await this.userRepository
+      .createQueryBuilder('user')
+      .addSelect('user.password')
+      .where('user.email = :email', { email })
+      .getOne();
 
-    if (!user) throw new UnauthorizedException('Not valid credentials');
+    if (!user || !user.is_active)
+      throw new UnauthorizedException('Not valid credentials');
 
     if (!bcrypt.compareSync(password, user.password))
       throw new UnauthorizedException('Not valid credentials');
 
-    return user;
+    const { password: userPassword, ...safeUser } = user;
+    void userPassword;
+
+    return {
+      ...safeUser,
+      token: this.getJwtToken({ id: user.id }),
+    };
+  }
+
+  private getJwtToken(payload: JwtPayload) {
+    return this.jwtService.sign(payload);
   }
 
   handleDBExceptions(error: unknown): never {
