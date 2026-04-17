@@ -14,8 +14,11 @@ import {
 } from '@nestjs/common';
 import { FilesService } from './files.service';
 import { FileInterceptor, FilesInterceptor } from '@nestjs/platform-express';
+import { Auth } from '../auth/decorators/auth.decorator';
+import { ValidRoles } from '../auth/interfaces/valid-roles.enum';
 
 @Controller('files')
+@Auth(ValidRoles.admin)
 export class FilesController {
   constructor(private readonly filesService: FilesService) {}
 
