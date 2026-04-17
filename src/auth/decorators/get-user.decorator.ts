@@ -3,13 +3,9 @@ import {
   ExecutionContext,
   InternalServerErrorException,
 } from '@nestjs/common';
-import { Request } from 'express';
 
 import { User } from '../entities/user.entity';
-
-interface RequestWithUser extends Request {
-  user?: User;
-}
+import { RequestWithUser } from '../interfaces/request-with-user.interface';
 
 export const GetUser = createParamDecorator(
   (data: keyof User | undefined, ctx: ExecutionContext) => {
